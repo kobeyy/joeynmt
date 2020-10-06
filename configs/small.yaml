@@ -1,6 +1,6 @@
 name: "my_experiment"
 
-# This configuration serves the purpose of documenting and explaining the settings, *NOT* as an example for good hyperparamter settings.
+# This configuration serves the purpose of documenting and explaining the settings, *NOT* as an example for good hyperparameter settings.
 
 data: # specify your data here
     src: "de"                       # src language: expected suffix of train files, e.g. "train.de"
@@ -22,6 +22,7 @@ data: # specify your data here
 testing:                            # specify which inference algorithm to use for testing (for validation it's always greedy decoding)
     beam_size: 5                    # size of the beam for beam search
     alpha: 1.0                      # length penalty for beam search
+    postprocess: True               # remove BPE splits after translation, this only applies if "level" is "bpe" (default: True)
 
 training:                           # specify training details here
     #load_model: "models/small_model/60.ckpt" # if given, load a pre-trained model from this checkpoint
@@ -43,6 +44,7 @@ training:                           # specify training details here
     eval_batch_size: 10             # mini-batch size for evaluation (see batch_size above)
     eval_batch_type: "sentence"     # evaluation batch type ("sentence", default) or tokens ("token")
     batch_multiplier: 1             # increase the effective batch size with values >1 to batch_multiplier*batch_size without increasing memory consumption by making updates only every batch_multiplier batches
+    normalization: "batch"           # loss normalization of a mini-batch, default: "batch" (by number of sequences in batch), other options: "tokens" (by number of tokens in batch), "none" (don't normalize, sum up loss)
     scheduling: "plateau"           # learning rate scheduling, optional, if not specified stays constant, options: "plateau", "exponential", "decaying", "noam" (for Transformer), "warmupexponentialdecay"
     patience: 5                     # specific to plateau scheduler: wait for this many validations without improvement before decreasing the learning rate
     decrease_factor: 0.5            # specific to plateau & exponential scheduler: decrease the learning rate by this factor
